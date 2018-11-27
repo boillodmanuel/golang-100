@@ -5,6 +5,11 @@ import "fmt"
 //indexOf prend en paramètre une chaine recherchée et un slice de chaines,
 //et retourne l'indice de la chaine recherchée dans le slice, ou -1 si elle n'a pas été trouvée.
 func indexOf(search string, s []string) int {
+	for i, v := range s {
+		if v == search {
+			return i
+		}
+	}
 	return -1
 }
 
@@ -12,7 +17,23 @@ func indexOf(search string, s []string) int {
 //et retourne un slice de slice.
 //Ex: split("|", []string{"|", "B", "|", "C", "D", "E", "|", "F", "|"}) = [[B] [C D E] [F]]
 func split(delimiteur string, s []string) [][]string {
-	return nil
+	array := make([][]string, 0)
+	subarray := make([]string, 0)
+
+	for _, v := range s {
+		if v == delimiteur {
+			if len(subarray) > 0 {
+				array = append(array, subarray)
+				subarray = make([]string, 0)
+			}
+		} else {
+			subarray = append(subarray, v)
+		}
+	}
+	if len(subarray) > 0 {
+		array = append(array, subarray)
+	}
+	return array
 }
 
 func main() {

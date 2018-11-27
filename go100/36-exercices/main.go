@@ -2,18 +2,18 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 )
 
 const url = "https://www.google.fr/search?q=golang"
 
-func curl(c chan string) {
-	resp, err := http.Get(url)
-	if err == nil {
-		c <- resp.Status
+var i = 1
+
+func curl(c chan string, e chan string) {
+	if i++; i % 2 == 0{
+		c <- "Success"
 	} else {
-		c <- "Error"
+		e <- "Error"
 	}
 }
 
@@ -21,14 +21,21 @@ func main() {
 	defer trackTimeElapsed(time.Now())
 
 	c := make(chan string)
+	e := make(chan string)
 
 	const reqCount = 20
 	for i := 0; i < reqCount; i++ {
-		go curl(c)
+		go curl(c, e)
 	}
 	for i := 0; i < reqCount; i++ {
-		result := <-c
-		fmt.Printf(url+" responded with HTTP status %s\n", result)
+		select {
+		case result := <-c:
+			fmt.Printf(url+" OK: %s", result)
+		case err := <- e:
+			fmt.Printf(url+" ERROR: %s\n", err)
+		}
+		//result := <-c
+		//fmt.Printf(url+" responded with HTTP status %s\n", result)
 	}
 }
 

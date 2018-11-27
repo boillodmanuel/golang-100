@@ -3,15 +3,16 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 )
 
 const url = "https://www.google.fr/search?q=golang"
 
-func curl(c chan string) {
+func curl(index int, c chan string) {
 	resp, err := http.Get(url)
 	if err == nil {
-		c <- resp.Status
+		c <- resp.Status + " (n˚ " + strconv.Itoa(index) + ")"
 	} else {
 		c <- "Error"
 	}
@@ -22,9 +23,9 @@ func main() {
 
 	c := make(chan string)
 
-	const reqCount = 20
+	const reqCount = 10
 	for i := 0; i < reqCount; i++ {
-		go curl(c)
+		go curl(i, c)
 	}
 	for i := 0; i < reqCount; i++ {
 		result := <-c

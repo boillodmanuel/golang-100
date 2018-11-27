@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -19,10 +20,13 @@ func curl() string {
 func main() {
 	defer trackTimeElapsed(time.Now())
 
-	const reqCount = 20
+	unusedCh := make(chan string, 3)
+	//ch <- ""
+	const reqCount = 3
 	for i := 0; i < reqCount; i++ {
+
 		result := curl()
-		fmt.Printf(url+" responded with HTTP status %s\n", result)
+		fmt.Printf(strconv.Itoa(i) + " " + url+" responded with HTTP status %s\n", result)
 	}
 }
 

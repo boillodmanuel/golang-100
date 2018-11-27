@@ -3,7 +3,9 @@ package main
 import "fmt"
 
 func multiplicateurPar(x int) func(int) int {
-	// TODO: implémenter cette fonction
+	return func (value int) int {
+		return x * value
+	}
 }
 
 func main() {

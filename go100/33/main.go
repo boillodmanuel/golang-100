@@ -25,4 +25,6 @@ func main() {
 	fmt.Printf("%q %v\n", s, ok)
 	s, ok = <-ch
 	fmt.Printf("%q %v\n", s, ok)
+	s, ok = <-ch
+	fmt.Printf("%q %v\n", s, ok)
 }
